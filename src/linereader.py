@@ -1,3 +1,10 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import animation
+
+from func import linear_motion
+
 def decoder(line_data): #takes numpy data  
     #return param
     gcode = []
@@ -25,18 +32,39 @@ def decoder(line_data): #takes numpy data
 
     return gcode,X,Y,Z
         
+def animate_func(num, ax, dataSet):
+    ax.clear()  
+    ax.plot3D(dataSet[0, :num+1], dataSet[1, :num+1], 
+              dataSet[2, :num+1], c='blue')
+    ax.scatter(dataSet[0, num], dataSet[1, num], dataSet[2, num], 
+               c='blue', marker='o')
+    ax.plot3D(dataSet[0, 0], dataSet[1, 0], dataSet[2, 0],     
+               c='black', marker='o')
+    ax.set_xlim3d([-10, 10])
+    ax.set_ylim3d([-10, 10])
+    ax.set_zlim3d([0, 10])
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+
 
 def func_decoder(xi, yi, zi, gcode, mcode, X, Y, Z, F, S):
-    
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')  # Define ax here
+
     for idx, data in enumerate(gcode):
         if (data == 0):
             custom_vel = 10
-            # call the animation function which moves the cutter to the desired X,Y,Z location 
             datapoints = np.array(linear_motion(xi, yi, zi, X, Y, Z, custom_vel))
+            line_ani = animation.FuncAnimation(fig, animate_func, interval=100, frames=len(datapoints[0]),
+                                               fargs=(ax, datapoints))
 
-        
-        if (data == 1):
-            # call the animation function which moves the cutter to the desired X,Y,Z location 
-            linear_motion(xi, yi, zi, X, Y, Z, feed)
+        elif (data == 1):
+            feed = F
+            datapoints = np.array(linear_motion(xi, yi, zi, X, Y, Z, feed))
+            line_ani = animation.FuncAnimation(fig, animate_func, interval=100, frames=len(datapoints[0]),
+                                               fargs=(ax, datapoints))
 
-    
+    plt.show()
+
+
