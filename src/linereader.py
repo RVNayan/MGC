@@ -47,9 +47,8 @@ def animate_func(num, ax, dataSet):
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 
-
-def func_decoder(xi, yi, zi, gcode, mcode, X, Y, Z, F, S):
-    fig = plt.figure()
+#change the way the animations are triggeredd, compute the trajectory and give the entire datapoints as inputs: [X,Y,Z,time or speed]
+def func_decoder(fig,xi, yi, zi, gcode, mcode, X, Y, Z, F, S):
     ax = plt.axes(projection='3d')  # Define ax here
 
     for idx, data in enumerate(gcode):
