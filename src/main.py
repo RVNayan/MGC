@@ -19,18 +19,15 @@ for lines in arrays_collection:
     line_data = [[str(item)] for item in lines]
     lines_data.append(line_data)
 
-x,y,z = [0],[0],[0]
+x,y,z = [0],[0],[0] #manual setup
 mcode = [99]
 F = [1]
 S = [1]
-
+path = []
 for i in range(len(lines_data)):
-    fig = plt.figure()
     gcode, X, Y, Z = decoder(lines_data[i])
-    func_decoder(fig, x,y,z, gcode, mcode, X,Y,Z,F,S)
-    plt.show()
+    func_decoder(path, x, y, z, gcode, mcode, X, Y, Z, F,S)
     x = X
     y = Y
     z = Z
-#add functional for additional lines 
-# print(lines_data)
+print(path) #generated points and currosponding velocities

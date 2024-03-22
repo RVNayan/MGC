@@ -48,22 +48,18 @@ def animate_func(num, ax, dataSet):
     ax.set_zlabel('z')
 
 #change the way the animations are triggeredd, compute the trajectory and give the entire datapoints as inputs: [X,Y,Z,time or speed]
-def func_decoder(fig,xi, yi, zi, gcode, mcode, X, Y, Z, F, S):
-    ax = plt.axes(projection='3d')  # Define ax here
+def func_decoder(path, xi, yi, zi, gcode, mcode, X, Y, Z, F, S):
 
     for idx, data in enumerate(gcode):
         if (data == 0):
-            custom_vel = 10
-            datapoints = np.array(linear_motion(xi, yi, zi, X, Y, Z, custom_vel))
-            line_ani = animation.FuncAnimation(fig, animate_func, interval=100, frames=len(datapoints[0]),
-                                               fargs=(ax, datapoints))
+            custom_vel = [10]
+            datapoints = linear_motion(xi, yi, zi, X, Y, Z, custom_vel)
 
         elif (data == 1):
             feed = F
-            datapoints = np.array(linear_motion(xi, yi, zi, X, Y, Z, feed))
-            line_ani = animation.FuncAnimation(fig, animate_func, interval=100, frames=len(datapoints[0]),
-                                               fargs=(ax, datapoints))
-
-    plt.show()
+            datapoints = linear_motion(xi, yi, zi, X, Y, Z, feed)
+        path.append(datapoints)
+    return path
+    # plt.show()
 
 
